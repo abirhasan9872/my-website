@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Love You Heart Animation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0b0b0b;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .heart {
+            position: absolute;
+            inset: 50% auto auto 50%;
+            width: 0;
+            height: 0;
+            margin: 0;
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        .heart__item {
+            position: absolute;
+            inset: 0 auto auto 0;
+            color: #ff65a3;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+            text-shadow: 0 0 8px rgba(255, 101, 163, 0.6), 0 0 20px rgba(255, 101, 163, 0.4);
+            animation: 
+                sway 4s ease-in-out infinite alternate,
+                fadeInOut 2s ease-in-out infinite;
+            animation-delay: calc(var(--index) * 0.04s);
+            transform: translate(var(--x), var(--y)) rotate(var(--rot));
+            will-change: transform;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        @keyframes sway {
+            0% {
+                filter: brightness(0.8);
+            }
+            100% {
+                filter: brightness(1.3);
+            }
+        }
+
+        /* Bottom Controls / Link text styling */
+        .watermark {
+            position: absolute;
+            bottom: 20px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="heart" id="heartContainer"></div>
+        <div class="watermark">Made with ❤️ for someone special</div>
+    </div>
+
+    <script>
+        const heartContainer = document.getElementById('heartContainer');
+        const text = "I love you ";
+        const totalItems = 120; // Number of text items forming the heart
+
+        for (let i = 0; i < totalItems; i++) {
+            const item = document.createElement('div');
+            item.className = 'heart__item';
+            
+            // Parametric heart equations
+            const t = (i / totalItems) * Math.PI * 2;
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+            
+            // Scaling the heart size
+            const scale = 14;
+            const posX = x * scale;
+            const posY = y * scale;
+            
+            // Rotation angle to align text along the curve
+            const rot = (t * (180 / Math.PI)) - 90;
+
+            item.style.setProperty('--index', i);
+            item.style.setProperty('--x', `${posX}px`);
+            item.style.setProperty('--y', `${posY}px`);
+            item.style.setProperty('--rot', `${rot}deg`);
+            
+            item.innerText = text;
+            heartContainer.appendChild(item);
+        }
+    </script>
+</body>
+</html>
